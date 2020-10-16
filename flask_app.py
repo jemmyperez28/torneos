@@ -1,13 +1,13 @@
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask
+from flask import Flask , render_template
 from config import Conexion
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Test de Mostrar en Tablita en pythonanywhere'
+    return render_template("index.html")
 
 @app.route('/test')
 def test():
@@ -27,6 +27,7 @@ def test2():
     print(data)
     conecta.desconectar()
     return 'Test1'
+
 
 if __name__ == "__main__":
     app.run(debug=True)
