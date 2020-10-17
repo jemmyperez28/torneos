@@ -73,7 +73,7 @@ def registro():
         #Validacion de correo ya registrado.
         conecta = Conexion()
         cur = conecta.conectar()
-        ejecucion = "SELECT * FROM USUARIOS WHERE EMAIL = '{email}'".format(email=email)
+        ejecucion = "SELECT * FROM usuarios WHERE EMAIL = '{email}'".format(email=email)
         cur.execute(ejecucion)
         email_existe = cur.fetchone()
         conecta.desconectar()
