@@ -7,9 +7,22 @@
             <li class="breadcrumb-item active">Inicio</li>
           </ol>
           <!-- Page Content -->
-          <h1>Inicio :)</h1>
-          <hr>
-          <p>Punto de partida!</p>
+         {% if session['loggedin'] %}
+         <center> <h2>Bienvenido  {{ session['nick'] }} ! </h2> </center>
+         {% else %}
+         <center> <h2>Bienvenido Anonimo </h2></center>
+       <center> Porfavor Para poder registrarte en torneos o concursos <a href="{{url_for('login')}}">Inicie Sesion</a> o <a href="{{url_for('registro')}}">Registrese</a> </center>
+         {% endif %}
+        <hr>
+       <style>
+       img {
+              width: 100%;
+              height: auto;
+            }
+            </style>
+       <img src="/static/images/samurai_panel.jpg">
+
+
         </div>
         <!-- /.container-fluid -->
 {% endblock %}

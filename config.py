@@ -10,8 +10,10 @@ class Conexion:
         cur = self.db.cursor()
         return cur
 
-    #def insertar(self):
+    def commit(self):
+        self.db.commit()
 
+    #def insertar(self):
     def desconectar(self):
         self.db.close()
 
