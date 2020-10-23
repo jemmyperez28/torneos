@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+		{% if messages  %}
+		{% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+		  {{ message }}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true"></span>
+		  </button>
+		</div>
+        {% endfor %}
+		{% endif %}
+		{% endwith %}
+
+   <div class="container-fluid">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Inicio</li>
+          </ol>
+          <!-- Page Content -->
+         {% if session['loggedin'] %}
+         <center> <h2>Bienvenido  {{ session['nick'] }} ! </h2> </center>
+         {% else %}
+         <center> <h2>Bienvenido Anonimo </h2></center>
+       <center> Porfavor Para poder registrarte en torneos o concursos <a href="{{url_for('login')}}">Inicie Sesion</a> o <a href="{{url_for('registro')}}">Registrese</a> </center>
+         {% endif %}
+        <hr>
+
+       <div class="card mb-3">
+           <div class="card-header">
+                <i class="fas fa-table"></i>
+               Torneos / Ligas </div>
+           <div class="card-body">
+               <div class="table-responsive">
+               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                          <thead>
+                            <tr>
+                              <th>Imagen Promo</th>
+                                <th>Nombre </th>
+                                <th>Tipo De Evento </th>
+                                <th>Fecha Inicio </th>
+                                <th>Participantes</th>
+                                <th> Estado </th>
+                                <th> Premio </th>
+                                <th> Donar </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for datos in data %}
+                            <tr>
+                                <td> <center> {{ datos.11 }} </center> </td>
+                                 <td> <center>{{ datos.1 }} </center></td>
+                                  <td><center> {{ datos.2 }} </center></td>
+                                  <td><center> {{ datos.3 }} </center></td>
+                                  <td><center> {{ datos.4 }} </center></td>
+                                  <td><center> {{ datos.5 }} </center></td>
+                                  <td><center> {{ datos.6 }} $</center> </td>
+                                  <td><center> {{ datos.9 }} </center></td>
+                                 <td> <a href="/detalles/{{datos.0}}"> Detalles </a>  </td>
+                                   {% if session['loggedin'] %}
+                                <td> <a href="/inscribirse/{{datos.0}}"> Inscribeme </a>  </td>
+                             {% endif %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+               </table>
+               </div>
+           </div>
+       </div>
+   </div>
+        <!-- /.container-fluid -->
+{% endblock %}

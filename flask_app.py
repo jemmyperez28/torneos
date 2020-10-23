@@ -105,6 +105,60 @@ def registro():
         return render_template("register.html")
     return render_template("index.html")
 
+@app.route('/eventos', methods=['GET','POST'])
+def eventos():
+    if request.method == 'GET':
+        #Obtiene los eventos activos
+        conecta = Conexion()
+        cur = conecta.conectar()
+        ejecucion = "SELECT * FROM eventos"
+        cur.execute(ejecucion)
+        data = cur.fetchall()
+        conecta.desconectar()
+        return render_template("eventos.html",data=data)
+
+@app.route('/inscribirse/<id>')
+def inscribirse(id):
+    if session['loggedin']:
+        myid = session['id']
+        #Obtiene las inscripciones del evento para ver si ya esta inscrito el Usuario.
+        conecta = Conexion()
+        cur = conecta.conectar()
+        ejecucion = "SELECT * FROM eventos_participantes where id_usuario = %s and id_evento = %s"
+        datos = (myid,id)
+        cur.execute(ejecucion,datos)
+        data = cur.fetchone()
+        if data:
+            mensaje = 'Alerta Ud, Ya se Registro en este Evento'
+            flash(mensaje)
+            conecta.desconectar()
+            return redirect(url_for('eventos'))
+        else:
+            conecta = Conexion()
+            cur = conecta.conectar()
+            ejecucion = "INSERT INTO eventos_participantes (id_usuario,id_evento,puntos,estado) values (%s,%s,0,'OK')"
+            datos = (myid,id)
+            try:
+                affected_count = cur.execute(ejecucion, datos)
+                conecta.commit()
+                data = "El Usuario" + str(myid) + " Se registro a evento : " + str(id)
+                app.logger.info("|" + data)
+            except mysql.connector.Error as error:
+                data = "Fallo en Insercion " + format.error
+                app.logger.info("|" + data)
+            finally:
+                conecta.desconectar()
+            mensaje = 'Inscripcion Satisfactoria'
+            flash(mensaje)
+            return redirect(url_for('eventos'))
+
+        return redirect(url_for('eventos'))
+    else:
+        mensaje = 'Porfavor Primero Inicie Sesion'
+        flash(mensaje)
+        return redirect(url_for('eventos'))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
